@@ -6,14 +6,12 @@ import axios from 'axios'
 class App extends React.Component {
 
   state = {
-    quote: {},
-    isLoaded: false
+    quote: null
   }
 
   getQuote = () => {
-    this.setState({ isLoaded: false })
     axios.get('https://simpsons-quotes-api.herokuapp.com/quotes')
-      .then(res => { this.setState({ quote: res.data[0], isLoaded: true }) })
+      .then(res => { this.setState({ quote: res.data[0]}) })
   }
 
   componentDidMount() {
@@ -24,7 +22,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <button type="button" onClick={this.getQuote}>Get Simpsons quote</button>
-        {!this.state.isLoaded ? <div>Loading...</div> : <DisplayQuote quote={this.state.quote} />}
+        {!this.state.quote ? <div>Loading...</div> : <DisplayQuote quote={this.state.quote} />}
       </div>
     );
   }
