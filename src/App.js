@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import DisplayQuote from "./components/DisplayQuote";
+import axios from 'axios'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  state = {
+    quote: {},
+    isLoaded: false
+  }
+
+  getQuote = () => {
+    this.setState({ isLoaded: false })
+    axios.get('https://simpsons-quotes-api.herokuapp.com/quotes')
+      .then(res => { this.setState({ quote: res.data[0], isLoaded: true }) })
+  }
+
+  componentDidMount() {
+    this.getQuote()
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <button type="button" onClick={this.getQuote}>Get Simpsons quote</button>
+        {!this.state.isLoaded ? <div>Loading...</div> : <DisplayQuote quote={this.state.quote} />}
+      </div>
+    );
+  }
 }
 
 export default App;
