@@ -1,31 +1,23 @@
-import React from 'react';
-import './App.css';
-import DisplayQuote from "./components/DisplayQuote";
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./App.css";
+const App = () => {
+  const getPosts = async () => {
+    try {
+      const userPosts = await axios.get("http://dyagnosys.tk:8081");
 
-class App extends React.Component {
-
-  state = {
-    quote: null
-  }
-
-  getQuote = () => {
-    axios.get('https://simpsons-quotes-api.herokuapp.com/quotes')
-      .then(res => { this.setState({ quote: res.data[0]}) })
-  }
-
-  componentDidMount() {
-    this.getQuote()
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <button type="button" onClick={this.getQuote}>Get Simpsons quote</button>
-        {!this.state.quote ? <div>Loading...</div> : <DisplayQuote quote={this.state.quote} />}
-      </div>
-    );
-  }
-}
-
+      console.log(userPosts.data);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  useEffect(() => {
+    getPosts();
+  });
+  return (
+    <div>
+      <h1>useEffect</h1>
+    </div>
+  );
+};
 export default App;
